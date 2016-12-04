@@ -40,8 +40,6 @@ int main() {
         }
         break;
       case '\n':
-        cout << keypad[j][k];
-        break;
       case '\0':
         cout << keypad[j][k];
         break;
