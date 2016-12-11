@@ -12,18 +12,32 @@ bool compare(pair<char, int> x, pair<char, int> y) {
   return x.second > y.second || (x.second == y.second && x.first < y.first);
 }
 
+char decipher(char letter, int steps) {
+  int remainder = steps % 26;
+  int steps_to_wrap = 122 - int(letter);
+
+  if (remainder > steps_to_wrap) {
+    remainder = remainder - steps_to_wrap;
+    return char(96 + remainder);
+  } else {
+    return char(int(letter) + remainder);
+  }
+}
+
 int main() {
   ifstream file("4.input");
+  // ifstream file("4.test.input");
   string input;
   string line;
   int sum = 0;
-  std::map<char, int> hash;
+  map<char, int> hash;
+  vector<string> inputs;
 
   while (getline(file, line)) {
     istringstream str(line);
 
     while (getline(str, input, '-')) {
-      if (input.find_first_of("[") != string::npos) {
+      if (input.find_first_of('[') != string::npos) {
         vector<char> sector_id_inputs;
         vector<char> checksum_inputs;
 
@@ -78,8 +92,22 @@ int main() {
           sum += sector_id;
         }
 
+        for (auto itr = inputs.begin(); itr != inputs.end(); itr++) {
+          for (int x = 0; x < strlen((*itr).c_str()); x++) {
+            cout << decipher((*itr)[x], sector_id);
+          }
+
+          cout << " ";
+        }
+
+        cout << sector_id;
+        cout << endl;
+
         hash.clear();
+        inputs.clear();
       } else {
+        inputs.push_back(input);
+
         int i = 0;
 
         while (input[i] != '\0') {
